@@ -1,155 +1,150 @@
 #include <iostream>
 using namespace std;
-void Mavel_sort(int* g, int* array, int len, int flag)
-{
-    int b;
-    for (int i = 0; i < len; i++)
-    {
-        for (int j = 0; j < len - i - 1; j++)
-        {
-            if (array[j] > array[j + 1])
-            {
-                b = array[j];
-                array[j] = array[j + 1];
-                array[j + 1] = b;
-                b = g[j];
-                g[j] = g[j + 1];
-                g[j + 1] = b;
-            }
 
-            if (flag == 2 && array[j] == array[j + 1])
+
+void input(int*& mass, int* size)
+{
+    cout<<"Enter massive size\n";
+    cin>>*size;
+    mass = new int[*size];
+    for (int i = 0; i < *size; i++)
+    {
+        cin >> mass[i];
+    }
+}
+
+void output(int*& mass, int* size)
+{
+    if (*size != 0)
+    {
+        for (int i = 0; i < *size; i++)
+        {
+            cout << mass[i] <<" ";
+        }
+        cout << endl;
+    }
+    else
+    {
+        cout << "Error with massive occured" << endl;
+    }
+}
+
+int sorting(int num)
+{
+    int summ = 0;
+
+    while (num > 0)
+    {
+        summ += num % 100 / 10;
+        num /= 100;
+    }
+
+    return summ;
+}
+
+void sorting2(int* mass, int* size)
+{
+    bool checkSort = true;
+    while (checkSort)
+    {
+        checkSort = false;
+        for (int i = 0; i < *size - 1; i++)
+        {
+            if (sorting(mass[i])>sorting(mass[i+1])||((sorting(mass[i])==sorting(mass[i+1]))&&(mass[i]>mass[i+1])))
             {
-                if (g[j + 1] > g[j])
-                {
-                    b = g[j];
-                    g[j] = g[j + 1];
-                    g[j + 1] = b;
-                }
+                int temp = mass[i];
+                mass[i] = mass[i + 1];
+                mass[i + 1] = temp;
+                checkSort = true;
             }
         }
     }
 }
 
-void g1(int*& g, int& len)
+void sort1(int*& mass, int* size)
 {
-    cout << "Enter len mas: ";
-    cin >> len;
-    if (g != nullptr)
+    if (*size != 0)
     {
-        delete[] g;
+        sorting2(mass, size);
+        output(mass, size);
     }
-
-    g = new int[len];
-    cout << "Enter mas: ";
-    for (int i = 0; i < len; i++) {
-        cin >> g[i];
+    else {
+        cout << "Error with massive occured" << endl;
     }
-
+    delete [] mass;
 }
 
-void g2(int* g, int len)
+void sort2(int* mass, int* size)
 {
-    cout << "Massive: ";
-    for (int i = 0; i < len; i++) {
-        cout << g[i] << ' ';
-    }
-    cout << endl;
-
-}
-
-void sort1(int* g, int len)
-{
-    int flag = 1;
-    int const arr_sum_size = len;
-    int array[arr_sum_size];
-    for (int i = 0; i < len; i++)
-    {
-        int x2 = 0;
-        int sum = 0;
-        int x1 = g[i];
-        for (int j = 0; j < len; j++)
-        {
-            if (j % 2 != 0)
+    int temp;
+    for (int i = 0; i < *size; i++)
+        for (int j = 0; j < *size - i - 1; j++)
+            if (mass[j]%10 > mass[j + 1]%10)
             {
-                x2 = x1 % 10;
-                sum = sum + x2;
+                temp = mass[j];
+                mass[j] = mass[j + 1];
+                mass[j + 1] = temp;
             }
-            x1 = x1 / 10;
-        }
-        array[i] = sum;
-    }
-    Mavel_sort(g, array, len, flag);
-}
 
-void sort2(int* g, int len)
-{
-    int flag = 2;
-    int const arr_sum_size = len;
-    int array[arr_sum_size];
-    for (int i = 0; i < len; i++)
+    for (int i = 0; i < *size; i++)
     {
-        int x2 = 0;
-        int last = 0;
-        int x1 = g[i];
-        for (int j = 0; j < len; j++)
-        {
-            if (j == 0)
-            {
-                x2 = x1 % 10;
-                last = last + x2;
-            }
-            x1 = x1 / 10;
-        }
-        array[i] = last;
+        cout << mass[i] << " ";
     }
-    Mavel_sort(g, array, len, flag);
 }
 
-void exit()
-{
-    exit(0);
-}
 int main()
 {
-    int* g = nullptr;
-    int choice = 0;
-    int len = 0;
-    system("color A");
-    while (true)
+
+    setlocale(LC_ALL, "Eng");
+    int* mass;
+    int size=0;
+
+    int choice =0; // user variable choice
+
+    while (true) // endless cycle
+
     {
-        std::cout << "Choose a task:\n" << "1) Input\n" << "2) Output\n" << "3) Sort1\n" << "4) Sort2\n" << "5) Exit\n" << endl;
-        std::cin >> choice;
+        cout << "What number task you wanna do? \n"
+             <<"1. Task 1\n"
+             <<"2. Task 2\n"
+             <<"3. Task 3\n"
+             <<"4. Task 4\n"
+             <<"5. Exit\n";
+
+        cin >> choice;
         switch (choice)
         {
-        case 1:
-        {
-            g1(g, len);
-            break;
-        }
-        case 2:
-        {
-            g2(g, len);
-            break;
-        }
-        case 3: {
-            sort1(g, len);
-            break;
-        }
-        case 4: {
-            sort2(g, len);
-            break;
-        }
-        case 5:
-        {
-            exit();
-            break;
-        }
-        {
-            return 0;
-        }
-        default: {
-            std::cout << "Enter the correct value" << std::endl;
-        }
+            case 1:
+            {
+                /*Call function for exercise 1*/;
+                input(mass, &size);
+                break;
+            }
+
+            case 2:
+            {
+                /*Call function for exercise 2*/;
+                output(mass, &size);
+                break;
+            }
+
+            case 3:
+            {
+                /*Call function for exercise 3*/;
+                sort1(mass, &size);
+                break;
+            }
+
+            case 4:
+            {
+                /*Call function for exercise 4*/;
+                sort2(mass, &size);
+                break;
+            }
+            default:
+            {
+                return 0;
+            }
         }
     }
 }
